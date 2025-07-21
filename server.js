@@ -1,4 +1,3 @@
-// server.js
 import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors';
@@ -8,23 +7,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
-
-
-
-// Allow only frontend origin (e.g., Vercel or localhost)
+// CORS (only allow your frontend domains)
 app.use(
    cors({
-      origin: ["http://localhost:3000", "https://portfolio-1-ten-mocha.vercel.app/"],
-      methods: ["POST"],
+      origin: ["http://localhost:3000", "https://portfolio-1-ten-mocha.vercel.app"],
+      methods: ["POST", "GET"],
       credentials: true,
    })
 );
 
+app.use(express.json());
 
+// 📌 ROUTE: Health check
+app.get('/test', (req, res) => {
+   res.send('Server is working ✅');
+});
 
-
+// 📌 ROUTE: Send Email
 app.post('/send-email', async (req, res) => {
    const { name, email, message } = req.body;
 
@@ -40,7 +39,7 @@ app.post('/send-email', async (req, res) => {
       await transporter.sendMail({
          from: `"${name}" <${email}>`,
          to: process.env.SMTP_EMAIL,
-         subject: "New Contact Message",
+         subject: 'New Contact Message',
          html: `
         <h3>New Contact Message</h3>
         <p><strong>Name:</strong> ${name}</p>
@@ -56,7 +55,9 @@ app.post('/send-email', async (req, res) => {
    }
 });
 
+// Start server
 app.listen(PORT, () => {
-   console.log(`Server is running on port ${PORT}`);
+   console.log(`✅ Server is running on port ${PORT}`);
 });
+
 export default app;
