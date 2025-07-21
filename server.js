@@ -11,6 +11,20 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+
+
+// Allow only frontend origin (e.g., Vercel or localhost)
+app.use(
+   cors({
+      origin: ["http://localhost:3000", "https://portfolio-1-ten-mocha.vercel.app/"],
+      methods: ["POST"],
+      credentials: true,
+   })
+);
+
+
+
+
 app.post('/send-email', async (req, res) => {
    const { name, email, message } = req.body;
 
