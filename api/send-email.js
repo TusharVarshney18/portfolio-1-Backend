@@ -1,30 +1,10 @@
-import express from 'express';
 import nodemailer from 'nodemailer';
-import cors from 'cors';
-import dotenv from 'dotenv';
 
-dotenv.config();
-const app = express();
-const PORT = process.env.PORT || 5000;
+export default async function handler(req, res) {
+   if (req.method !== 'POST') {
+      return res.status(405).json({ message: 'Only POST requests allowed' });
+   }
 
-// CORS (only allow your frontend domains)
-app.use(
-   cors({
-      origin: ["http://localhost:3000", "https://portfolio-1-ten-mocha.vercel.app"],
-      methods: ["POST", "GET"],
-      credentials: true,
-   })
-);
-
-app.use(express.json());
-
-// 📌 ROUTE: Health check
-app.get('/test', (req, res) => {
-   res.send('Server is working ✅');
-});
-
-// 📌 ROUTE: Send Email
-app.post('/send-email', async (req, res) => {
    const { name, email, message } = req.body;
 
    try {
@@ -53,11 +33,4 @@ app.post('/send-email', async (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'Something went wrong' });
    }
-});
-
-// Start server
-app.listen(PORT, () => {
-   console.log(`✅ Server is running on port ${PORT}`);
-});
-
-export default app;
+}
