@@ -28,6 +28,19 @@ export default async function handler(req, res) {
       `,
       });
 
+      await transporter.sendMail({
+         from: process.env.SMTP_EMAIL,
+         to: email,
+         subject: 'Thank you for reaching out',
+         html: `
+        <h3>Thank you for reaching out</h3>
+        <p>Hi ${name},</p>
+        <p>Thank you for taking the time to reach out to me. I appreciate your message and will get back to you as soon as possible.</p>
+        <p>Best regards,</p>
+        <p>Tushar</p>
+      `,
+      });
+
       res.status(200).json({ message: 'Message sent successfully' });
    } catch (err) {
       console.error(err);
