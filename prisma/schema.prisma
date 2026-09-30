@@ -1,0 +1,72 @@
+// ── Prisma schema for the portfolio admin backend ──────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  source    String   @default("contact-form")
+  isRead    Boolean  @default(false) @map("read")
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model AssistantMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  visitor   String   @default("anonymous")
+  sender    String
+  text      String
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String
+  page      String?
+  referrer  String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([type])
+}
+
+model ClickEvent {
+  id        String   @id @default(cuid())
+  target    String
+  href      String?
+  page      String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([target])
+}
+
+model DeviceToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  platform  String   @default("expo")
+  createdAt DateTime @default(now())
+}
