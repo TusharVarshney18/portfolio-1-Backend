@@ -51,14 +51,14 @@ router.get("/stats", requireAuth, async (req, res) => {
         by: ["page"],
         where: { type: "pageview", createdAt: { gte: since } },
         _count: { _all: true },
-        orderBy: { _count: { _all: "desc" } },
+        orderBy: { _count: { id: "desc" } },
         take: 10,
       }),
       prisma.analyticsEvent.groupBy({
         by: ["referrer"],
         where: { referrer: { not: null }, createdAt: { gte: since } },
         _count: { _all: true },
-        orderBy: { _count: { _all: "desc" } },
+        orderBy: { _count: { id: "desc" } },
         take: 10,
       }),
     ]);

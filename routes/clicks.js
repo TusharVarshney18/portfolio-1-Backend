@@ -36,7 +36,7 @@ router.get("/stats", requireAuth, async (req, res) => {
     prisma.clickEvent.groupBy({
       by: ["target", "href"],
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
+      orderBy: { _count: { id: "desc" } },
       take: 20,
     }),
   ]);
