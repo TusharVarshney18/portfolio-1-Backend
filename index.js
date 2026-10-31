@@ -15,7 +15,12 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
+// Default to the portfolio site + local dev when ALLOWED_ORIGINS is not set.
+// Requests without an Origin (server-to-server relay, mobile admin app) are allowed.
+const allowedOrigins = (
+  process.env.ALLOWED_ORIGINS ||
+  "https://portfolio-2-frontend-ten.vercel.app,http://localhost:3000"
+)
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -23,7 +28,7 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));
