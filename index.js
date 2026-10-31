@@ -19,7 +19,7 @@ const app = express();
 // Requests without an Origin (server-to-server relay, mobile admin app) are allowed.
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS ||
-  "https://portfolio-2-frontend-ten.vercel.app,http://localhost:3000"
+  "https://tushar-varshney.vercel.app,https://portfolio-2-frontend-ten.vercel.app,http://localhost:3000"
 )
   .split(",")
   .map((origin) => origin.trim())
